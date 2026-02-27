@@ -1,40 +1,585 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Dashly</title>
+    <meta name="description" content="Dashly Privacy Policy — how we handle your data.">
+    <title>Privacy Policy — Dashly</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 60px auto; padding: 0 20px; color: #4A3C3C; background: #FFFBF7; }
-        h1, h2 { color: #4A3C3C; }
-        a { color: #FFB4C4; }
+        /* ── Reset & base ─────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --primary:      #FFB4C4;
+            --primary-dark: #f093a8;
+            --secondary:    #FFC766;
+            --bg:           #FFFBF7;
+            --surface:      #FFF0E8;
+            --text:         #4A3C3C;
+            --text-muted:   #8A7070;
+            --white:        #FFFFFF;
+            --radius-sm:    12px;
+            --radius-md:    20px;
+            --shadow-sm:    0 2px 12px rgba(74,60,60,0.07);
+            --shadow-md:    0 8px 32px rgba(74,60,60,0.11);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Karla', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.25;
+        }
+
+        a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        a:hover { color: #c0607a; text-decoration: underline; }
+
+        /* ── Layout ───────────────────────────────────────────── */
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            margin-inline: auto;
+            padding-inline: 24px;
+        }
+
+        /* ── NAV ──────────────────────────────────────────────── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 251, 247, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255,180,196,0.18);
+        }
+
+        .nav__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .nav__logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.3px;
+        }
+
+        .nav__logo span { color: var(--primary-dark); }
+
+        .nav__back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .nav__back:hover { color: var(--text); text-decoration: none; }
+
+        /* ── HERO ─────────────────────────────────────────────── */
+        .page-hero {
+            background: linear-gradient(160deg, var(--surface) 0%, var(--bg) 100%);
+            border-bottom: 1px solid rgba(255,180,196,0.18);
+            padding-block: 64px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero::after {
+            content: '';
+            position: absolute;
+            top: -60%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,180,196,0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .page-hero__eyebrow {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--primary-dark);
+            margin-bottom: 14px;
+        }
+
+        .page-hero__title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -1px;
+            margin-bottom: 14px;
+        }
+
+        .page-hero__meta {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-hero__dot {
+            width: 4px;
+            height: 4px;
+            background: var(--text-muted);
+            border-radius: 50%;
+        }
+
+        /* ── CONTENT LAYOUT ───────────────────────────────────── */
+        .content-layout {
+            padding-block: 64px 96px;
+            display: grid;
+            grid-template-columns: 1fr min(680px, 100%);
+            gap: 0;
+        }
+
+        /* stick the TOC on the left on wide screens */
+        .toc {
+            padding-right: 48px;
+        }
+
+        .toc__inner {
+            position: sticky;
+            top: 88px;
+            background: var(--white);
+            border: 1px solid rgba(74,60,60,0.07);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toc__title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .toc__list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .toc__list a {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+            text-decoration: none;
+        }
+
+        .toc__list a:hover {
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        /* ── PROSE ────────────────────────────────────────────── */
+        .prose {
+            min-width: 0;
+        }
+
+        .prose section {
+            margin-bottom: 56px;
+        }
+
+        .prose section:last-child {
+            margin-bottom: 0;
+        }
+
+        .prose h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--surface);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prose h2 .section-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .prose p {
+            font-size: 0.97rem;
+            color: var(--text);
+            margin-bottom: 14px;
+        }
+
+        .prose p:last-child { margin-bottom: 0; }
+
+        .prose ul {
+            margin: 12px 0 16px 0;
+            padding-left: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .prose ul li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.97rem;
+            color: var(--text);
+        }
+
+        .prose ul li::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
+            flex-shrink: 0;
+            margin-top: 7px;
+        }
+
+        .prose strong { font-weight: 600; color: var(--text); }
+
+        .info-box {
+            background: var(--surface);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 0.93rem;
+            color: var(--text-muted);
+        }
+
+        .contact-card {
+            background: var(--white);
+            border: 1px solid rgba(74,60,60,0.08);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            margin-top: 16px;
+        }
+
+        .contact-card__label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .contact-card__email {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .contact-card__email:hover { text-decoration: underline; }
+
+        .contact-card__note {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* ── FOOTER ───────────────────────────────────────────── */
+        .footer {
+            background: var(--text);
+            color: rgba(255,251,247,0.7);
+            padding-block: 48px;
+        }
+
+        .footer__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer__logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #FFFBF7;
+        }
+
+        .footer__logo span { color: var(--primary); }
+
+        .footer__tagline {
+            font-size: 0.82rem;
+            margin-top: 4px;
+            color: rgba(255,251,247,0.5);
+        }
+
+        .footer__links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .footer__links a {
+            font-size: 0.85rem;
+            color: rgba(255,251,247,0.6);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer__links a:hover { color: #FFFBF7; text-decoration: none; }
+
+        .footer__copy {
+            width: 100%;
+            font-size: 0.78rem;
+            color: rgba(255,251,247,0.35);
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,251,247,0.08);
+            margin-top: 12px;
+        }
+
+        /* ── RESPONSIVE ───────────────────────────────────────── */
+        @media (max-width: 860px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+                padding-block: 48px 72px;
+            }
+
+            .toc {
+                padding-right: 0;
+                margin-bottom: 40px;
+            }
+
+            .toc__inner {
+                position: static;
+            }
+
+            .toc__list {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+
+            .toc__list a {
+                font-size: 0.8rem;
+                padding: 5px 10px;
+                background: var(--surface);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page-hero { padding-block: 40px 32px; }
+            .footer__inner { flex-direction: column; align-items: flex-start; }
+        }
     </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    <p><strong>Dashly</strong> - Personal Expense Tracker</p>
-    <p>Last updated: February 27, 2026</p>
 
-    <h2>Information We Collect</h2>
-    <p>Dashly collects the following information when you sign in with Google:</p>
-    <ul>
-        <li>Your name and email address (for account identification)</li>
-        <li>Profile picture (optional, for display purposes)</li>
-    </ul>
-    <p>Dashly also stores expense, income, and category data that you manually enter in the app.</p>
+    <!-- ── NAV ── -->
+    <header class="nav">
+        <div class="container">
+            <nav class="nav__inner">
+                <a href="/dashly-site/" class="nav__logo">Dash<span>ly</span></a>
+                <a href="/dashly-site/" class="nav__back">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    Back to home
+                </a>
+            </nav>
+        </div>
+    </header>
 
-    <h2>How We Use Your Information</h2>
-    <p>Your data is used solely to provide the app's functionality: tracking expenses, income, and generating personal analytics. We do not sell, share, or distribute your data to third parties.</p>
+    <!-- ── PAGE HERO ── -->
+    <div class="page-hero">
+        <div class="container">
+            <div class="page-hero__eyebrow">Legal</div>
+            <h1 class="page-hero__title">Privacy Policy</h1>
+            <div class="page-hero__meta">
+                <span>Dashly — Personal Expense Tracker</span>
+                <span class="page-hero__dot"></span>
+                <span>Last updated: February 27, 2026</span>
+            </div>
+        </div>
+    </div>
 
-    <h2>Data Storage</h2>
-    <p>Your data is stored securely on our servers. You can request deletion of your account and all associated data at any time by contacting us.</p>
+    <!-- ── CONTENT ── -->
+    <div class="container">
+        <div class="content-layout">
 
-    <h2>Third-Party Services</h2>
-    <p>Dashly uses Google Sign-In for authentication. Google's privacy policy applies to the authentication process: <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
+            <!-- Table of Contents -->
+            <aside class="toc">
+                <div class="toc__inner">
+                    <div class="toc__title">On this page</div>
+                    <ul class="toc__list">
+                        <li><a href="#section-collect">Information We Collect</a></li>
+                        <li><a href="#section-use">How We Use It</a></li>
+                        <li><a href="#section-storage">Data Storage</a></li>
+                        <li><a href="#section-sharing">Data Sharing</a></li>
+                        <li><a href="#section-third-party">Third-Party Services</a></li>
+                        <li><a href="#section-rights">Your Rights</a></li>
+                        <li><a href="#section-children">Children's Privacy</a></li>
+                        <li><a href="#section-changes">Changes</a></li>
+                        <li><a href="#section-contact">Contact</a></li>
+                    </ul>
+                </div>
+            </aside>
 
-    <h2>Contact</h2>
-    <p>For questions about this privacy policy, contact us at: alecodesdancer@gmail.com</p>
+            <!-- Prose content -->
+            <main class="prose">
 
-    <p><a href="/dashly-site/">Back to Home</a></p>
+                <div class="info-box">
+                    <strong>Short version:</strong> Dashly is a personal finance app. Your data belongs to you. We don't sell it, we don't share it, and we only collect what's necessary to make the app work.
+                </div>
+
+                <section id="section-collect">
+                    <h2><span class="section-icon">&#128100;</span> Information We Collect</h2>
+                    <p>Dashly collects only the minimum information needed to provide its functionality.</p>
+                    <p><strong>When you sign in with Google:</strong></p>
+                    <ul>
+                        <li>Your name and email address, used to identify your account</li>
+                        <li>Your profile picture (optional, used only for display purposes within the app)</li>
+                    </ul>
+                    <p><strong>When you use the app:</strong></p>
+                    <ul>
+                        <li>Expense records you manually create (amount, category, date, description, payment method)</li>
+                        <li>Income records you manually create (amount, category, date)</li>
+                        <li>Categories and payment methods you configure</li>
+                        <li>Recurring expense and income rules you set up</li>
+                    </ul>
+                    <p>We do not collect location data, contacts, camera rolls, or any device information beyond what is strictly required to authenticate you.</p>
+                </section>
+
+                <section id="section-use">
+                    <h2><span class="section-icon">&#128202;</span> How We Use Your Information</h2>
+                    <p>Your data is used <strong>solely to provide the app's functionality</strong>:</p>
+                    <ul>
+                        <li>Displaying your expenses, income, and balances in the app</li>
+                        <li>Generating your personal analytics and spending breakdowns</li>
+                        <li>Sending you in-app reminders for recurring transactions (if you enable them)</li>
+                        <li>Responding to support requests you submit via the feedback form</li>
+                    </ul>
+                    <p>We do not use your financial data for advertising, profiling, or any purpose beyond the core app experience.</p>
+                </section>
+
+                <section id="section-storage">
+                    <h2><span class="section-icon">&#128274;</span> Data Storage &amp; Security</h2>
+                    <p>Your data is stored on secure servers hosted on <strong>Railway</strong> (railway.app), a cloud infrastructure provider with industry-standard security practices including encryption at rest and in transit.</p>
+                    <p>Authentication tokens are stored locally on your device using <strong>Expo SecureStore</strong>, which leverages the iOS Keychain for secure storage.</p>
+                    <p>All communication between the app and our servers uses HTTPS (TLS encryption).</p>
+                </section>
+
+                <section id="section-sharing">
+                    <h2><span class="section-icon">&#128275;</span> Data Sharing</h2>
+                    <p>We do not sell, rent, trade, or otherwise share your personal data or financial data with any third party — period.</p>
+                    <p>The only exception is the infrastructure providers needed to run the service (e.g., the cloud host), which process data solely on our behalf and under strict confidentiality.</p>
+                </section>
+
+                <section id="section-third-party">
+                    <h2><span class="section-icon">&#128279;</span> Third-Party Services</h2>
+                    <p>Dashly integrates with the following third-party services. Their respective privacy policies apply to the portions of data they handle:</p>
+                    <ul>
+                        <li><strong>Google Sign-In</strong> — Used for optional authentication. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy &#8599;</a></li>
+                        <li><strong>Railway</strong> — Cloud hosting provider for the backend and database. <a href="https://railway.app/legal/privacy" target="_blank" rel="noopener">Railway Privacy Policy &#8599;</a></li>
+                        <li><strong>Resend</strong> — Used to send a confirmation email to the developer when you submit feedback. Your email address is included only if you choose to provide it in the feedback form.</li>
+                    </ul>
+                </section>
+
+                <section id="section-rights">
+                    <h2><span class="section-icon">&#127381;</span> Your Rights</h2>
+                    <p>You have full control over your data:</p>
+                    <ul>
+                        <li><strong>Access</strong> — You can view all your data directly within the app at any time.</li>
+                        <li><strong>Export</strong> — You can export your expense history as a CSV file from the app settings.</li>
+                        <li><strong>Deletion</strong> — You can request complete deletion of your account and all associated data at any time by contacting us at the email below. We will process the request within 30 days.</li>
+                    </ul>
+                </section>
+
+                <section id="section-children">
+                    <h2><span class="section-icon">&#128118;</span> Children's Privacy</h2>
+                    <p>Dashly is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected such information, please contact us immediately and we will delete it.</p>
+                </section>
+
+                <section id="section-changes">
+                    <h2><span class="section-icon">&#128221;</span> Changes to This Policy</h2>
+                    <p>If we make material changes to this privacy policy, we will update the "Last updated" date at the top of this page. We encourage you to review this page periodically. Continued use of the app after changes are posted constitutes your acceptance of those changes.</p>
+                </section>
+
+                <section id="section-contact">
+                    <h2><span class="section-icon">&#128140;</span> Contact</h2>
+                    <p>If you have any questions about this privacy policy, want to request data deletion, or need to reach us for any other reason, please get in touch:</p>
+                    <div class="contact-card">
+                        <div class="contact-card__label">Email</div>
+                        <a href="mailto:alecodesdancer@gmail.com" class="contact-card__email">alecodesdancer@gmail.com</a>
+                        <div class="contact-card__note">We typically respond within 2&ndash;3 business days.</div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div>
+                    <div class="footer__logo">Dash<span>ly</span></div>
+                    <div class="footer__tagline">Personal expense tracking for iOS</div>
+                </div>
+                <nav class="footer__links">
+                    <a href="/dashly-site/">Home</a>
+                    <a href="https://www.buymeacoffee.com/alecodes" target="_blank" rel="noopener">Buy me a coffee &#9749;</a>
+                    <a href="mailto:alecodesdancer@gmail.com">Contact</a>
+                </nav>
+            </div>
+            <div class="footer__copy">
+                &copy; 2026 Dashly. Made with love in Mexico.
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>

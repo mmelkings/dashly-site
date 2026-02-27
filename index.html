@@ -1,23 +1,932 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="ustJF1Ry-O-oPUS051Beg-cpQ3ksyQCoXa2xcTxWRpc" />
-    <title>Dashly - Personal Expense Tracker</title>
+    <meta name="description" content="Dashly — The personal expense tracker that keeps your finances beautiful and clear. Track spending, income, and insights all in one place.">
+    <title>Dashly — Personal Expense Tracker</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 60px auto; padding: 0 20px; color: #4A3C3C; background: #FFFBF7; }
-        h1 { color: #4A3C3C; }
-        a { color: #FFB4C4; }
-        .links { margin-top: 40px; }
+        /* ── Reset & base ─────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --primary:   #FFB4C4;
+            --primary-dark: #f093a8;
+            --secondary: #FFC766;
+            --bg:        #FFFBF7;
+            --surface:   #FFF0E8;
+            --surface2:  #FFE8D6;
+            --text:      #4A3C3C;
+            --text-muted:#8A7070;
+            --white:     #FFFFFF;
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --shadow-sm: 0 2px 12px rgba(74,60,60,0.07);
+            --shadow-md: 0 8px 32px rgba(74,60,60,0.11);
+            --shadow-lg: 0 20px 60px rgba(74,60,60,0.13);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Karla', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.2;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        img { display: block; max-width: 100%; }
+
+        /* ── Layout helpers ───────────────────────────────────── */
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            margin-inline: auto;
+            padding-inline: 24px;
+        }
+
+        .section {
+            padding-block: 96px;
+        }
+
+        /* ── NAV ──────────────────────────────────────────────── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 251, 247, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255, 180, 196, 0.18);
+        }
+
+        .nav__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .nav__logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.3px;
+        }
+
+        .nav__logo span {
+            color: var(--primary-dark);
+        }
+
+        .nav__links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav__links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .nav__links a:hover { color: var(--text); }
+
+        .nav__cta {
+            background: var(--primary);
+            color: var(--text) !important;
+            padding: 8px 22px;
+            border-radius: 100px;
+            font-weight: 600 !important;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
+            box-shadow: 0 2px 10px rgba(255,180,196,0.35);
+        }
+
+        .nav__cta:hover {
+            background: var(--primary-dark) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(255,180,196,0.45) !important;
+        }
+
+        /* ── HERO ─────────────────────────────────────────────── */
+        .hero {
+            padding-block: 80px 96px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 70% 55% at 50% -10%, rgba(255,180,196,0.22) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 85% 80%, rgba(255,199,102,0.13) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero__badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface);
+            border: 1px solid rgba(255,180,196,0.4);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 28px;
+            letter-spacing: 0.2px;
+        }
+
+        .hero__title {
+            font-size: clamp(2.6rem, 6vw, 4.2rem);
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -1.5px;
+            margin-bottom: 22px;
+            max-width: 720px;
+            margin-inline: auto;
+        }
+
+        .hero__title .accent {
+            color: var(--primary-dark);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero__title .accent::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 2px;
+            opacity: 0.7;
+        }
+
+        .hero__sub {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--text-muted);
+            max-width: 520px;
+            margin-inline: auto;
+            margin-bottom: 44px;
+            line-height: 1.7;
+        }
+
+        .hero__actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 100px;
+            padding: 14px 30px;
+            font-family: 'Karla', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--text);
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            background: #2e2020;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1.5px solid rgba(74,60,60,0.1);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface2);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ── PHONE MOCKUP ─────────────────────────────────────── */
+        .hero__mockup {
+            margin-top: 72px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mockup-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .mockup-glow {
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,180,196,0.25) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .phone {
+            position: relative;
+            z-index: 1;
+            width: 240px;
+            background: var(--white);
+            border-radius: 36px;
+            padding: 16px 12px;
+            box-shadow: 0 32px 80px rgba(74,60,60,0.18), 0 0 0 1.5px rgba(74,60,60,0.06);
+        }
+
+        .phone__notch {
+            width: 64px;
+            height: 8px;
+            background: var(--text);
+            border-radius: 100px;
+            margin: 0 auto 16px;
+        }
+
+        .phone__screen {
+            background: var(--bg);
+            border-radius: 24px;
+            padding: 16px 14px;
+            min-height: 380px;
+        }
+
+        .phone__header {
+            margin-bottom: 14px;
+        }
+
+        .phone__greeting {
+            font-family: 'Karla', sans-serif;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .phone__title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .phone__balance-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #f7a0b4 100%);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .phone__balance-label {
+            font-size: 0.6rem;
+            color: rgba(74,60,60,0.65);
+            font-family: 'Karla', sans-serif;
+            margin-bottom: 2px;
+        }
+
+        .phone__balance-amount {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .phone__balance-sub {
+            font-size: 0.58rem;
+            color: rgba(74,60,60,0.55);
+            margin-top: 4px;
+            font-family: 'Karla', sans-serif;
+        }
+
+        .phone__stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .phone__stat {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .phone__stat-label {
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            font-family: 'Karla', sans-serif;
+            margin-bottom: 2px;
+        }
+
+        .phone__stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .phone__stat-value.green { color: #3DAA6E; }
+
+        .phone__expenses-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .phone__expense-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 8px;
+            background: var(--white);
+            border-radius: 10px;
+            margin-bottom: 6px;
+        }
+
+        .phone__expense-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .phone__expense-info {
+            flex: 1;
+        }
+
+        .phone__expense-name {
+            font-family: 'Karla', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .phone__expense-cat {
+            font-size: 0.52rem;
+            color: var(--text-muted);
+            font-family: 'Karla', sans-serif;
+        }
+
+        .phone__expense-amount {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ── STATS BAR ────────────────────────────────────────── */
+        .stats-bar {
+            background: var(--surface);
+            border-top: 1px solid rgba(255,180,196,0.2);
+            border-bottom: 1px solid rgba(255,180,196,0.2);
+            padding-block: 48px;
+        }
+
+        .stats-bar__grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            text-align: center;
+        }
+
+        .stats-bar__divider {
+            border: none;
+            border-left: 1px solid rgba(74,60,60,0.1);
+        }
+
+        .stat-item__number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -1px;
+        }
+
+        .stat-item__number span {
+            color: var(--primary-dark);
+        }
+
+        .stat-item__label {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ── FEATURES ─────────────────────────────────────────── */
+        .features__header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-eyebrow {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--primary-dark);
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.8px;
+            margin-bottom: 16px;
+        }
+
+        .section-sub {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 480px;
+            margin-inline: auto;
+            line-height: 1.7;
+        }
+
+        .features__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 32px 28px;
+            border: 1px solid rgba(74,60,60,0.06);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-card__icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card__icon--pink   { background: rgba(255,180,196,0.25); }
+        .feature-card__icon--yellow { background: rgba(255,199,102,0.25); }
+        .feature-card__icon--green  { background: rgba(61,170,110,0.15);  }
+        .feature-card__icon--purple { background: rgba(162,126,228,0.15); }
+
+        .feature-card__title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .feature-card__desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* ── HOW IT WORKS ─────────────────────────────────────── */
+        .how {
+            background: var(--surface);
+        }
+
+        .how__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            position: relative;
+        }
+
+        .how__step {
+            text-align: center;
+            padding: 8px;
+        }
+
+        .how__step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 14px rgba(255,180,196,0.4);
+        }
+
+        .how__step-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .how__step-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* ── CTA SECTION ──────────────────────────────────────── */
+        .cta-section {
+            text-align: center;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #f7a0b4 40%, var(--secondary) 100%);
+            border-radius: var(--radius-lg);
+            padding: 72px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 60%;
+            height: 200%;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .cta-card__title {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.8px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .cta-card__sub {
+            font-size: 1rem;
+            color: rgba(74,60,60,0.75);
+            max-width: 420px;
+            margin-inline: auto;
+            margin-bottom: 36px;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        .cta-card .btn-primary {
+            position: relative;
+            background: var(--text);
+        }
+
+        /* ── FOOTER ───────────────────────────────────────────── */
+        .footer {
+            background: var(--text);
+            color: rgba(255,251,247,0.7);
+            padding-block: 48px;
+        }
+
+        .footer__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer__logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #FFFBF7;
+        }
+
+        .footer__logo span { color: var(--primary); }
+
+        .footer__tagline {
+            font-size: 0.82rem;
+            margin-top: 4px;
+            color: rgba(255,251,247,0.5);
+        }
+
+        .footer__links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .footer__links a {
+            font-size: 0.85rem;
+            color: rgba(255,251,247,0.6);
+            transition: color 0.2s;
+        }
+
+        .footer__links a:hover { color: #FFFBF7; }
+
+        .footer__copy {
+            width: 100%;
+            font-size: 0.78rem;
+            color: rgba(255,251,247,0.35);
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,251,247,0.08);
+            margin-top: 12px;
+        }
+
+        /* ── RESPONSIVE ───────────────────────────────────────── */
+        @media (max-width: 640px) {
+            .section { padding-block: 64px; }
+
+            .nav__links { display: none; }
+
+            .stats-bar__grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .stats-bar__divider { display: none; }
+
+            .how__grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer__inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cta-card { padding: 48px 20px; }
+
+            .phone { width: 200px; }
+
+            .phone__balance-amount { font-size: 1.1rem; }
+        }
     </style>
 </head>
 <body>
-    <h1>Dashly</h1>
-    <p>Personal expense tracking app. Track your spending, income, and savings goals with a simple and beautiful interface.</p>
-    <div class="links">
-        <p><a href="/dashly-site/privacy">Privacy Policy</a></p>
-        <p>Contact: alecodesdancer@gmail.com</p>
-    </div>
+
+    <!-- ── NAV ── -->
+    <header class="nav">
+        <div class="container">
+            <nav class="nav__inner">
+                <a href="/dashly-site/" class="nav__logo">Dash<span>ly</span></a>
+                <ul class="nav__links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How it works</a></li>
+                    <li><a href="https://www.buymeacoffee.com/alecodes" target="_blank" rel="noopener">Support</a></li>
+                    <li><a href="#download" class="nav__cta">Download</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ── HERO ── -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero__badge">
+                <span>&#10024;</span> Now available on iOS
+            </div>
+            <h1 class="hero__title">
+                Your finances,<br>
+                <span class="accent">beautifully clear</span>
+            </h1>
+            <p class="hero__sub">
+                Dashly helps you track every peso — expenses, income, and savings — with a calm, distraction-free interface designed to make you feel in control.
+            </p>
+            <div class="hero__actions">
+                <a href="#download" class="btn btn-primary" id="download">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+                    Get on the App Store
+                </a>
+                <a href="#features" class="btn btn-secondary">See features</a>
+            </div>
+
+            <!-- Phone mockup -->
+            <div class="hero__mockup">
+                <div class="mockup-wrap">
+                    <div class="mockup-glow"></div>
+                    <div class="phone">
+                        <div class="phone__notch"></div>
+                        <div class="phone__screen">
+                            <div class="phone__header">
+                                <div class="phone__greeting">Good morning, Ale 👋</div>
+                                <div class="phone__title">Dashboard</div>
+                            </div>
+                            <div class="phone__balance-card">
+                                <div class="phone__balance-label">Monthly Balance</div>
+                                <div class="phone__balance-amount">$4,820.00</div>
+                                <div class="phone__balance-sub">Income $12,500 &nbsp;·&nbsp; Spent $7,680</div>
+                            </div>
+                            <div class="phone__stats">
+                                <div class="phone__stat">
+                                    <div class="phone__stat-label">Fixed</div>
+                                    <div class="phone__stat-value">$3,200</div>
+                                </div>
+                                <div class="phone__stat">
+                                    <div class="phone__stat-label">Variable</div>
+                                    <div class="phone__stat-value">$4,480</div>
+                                </div>
+                            </div>
+                            <div class="phone__expenses-label">Recent Expenses</div>
+                            <div class="phone__expense-row">
+                                <div class="phone__expense-dot" style="background:#FFB4C4"></div>
+                                <div class="phone__expense-info">
+                                    <div class="phone__expense-name">Starbucks</div>
+                                    <div class="phone__expense-cat">Food &amp; Drink</div>
+                                </div>
+                                <div class="phone__expense-amount">$95.00</div>
+                            </div>
+                            <div class="phone__expense-row">
+                                <div class="phone__expense-dot" style="background:#FFC766"></div>
+                                <div class="phone__expense-info">
+                                    <div class="phone__expense-name">Spotify</div>
+                                    <div class="phone__expense-cat">Subscriptions</div>
+                                </div>
+                                <div class="phone__expense-amount">$99.00</div>
+                            </div>
+                            <div class="phone__expense-row">
+                                <div class="phone__expense-dot" style="background:#A27BE4"></div>
+                                <div class="phone__expense-info">
+                                    <div class="phone__expense-name">Gym</div>
+                                    <div class="phone__expense-cat">Health</div>
+                                </div>
+                                <div class="phone__expense-amount">$650.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── STATS BAR ── -->
+    <section class="stats-bar">
+        <div class="container">
+            <div class="stats-bar__grid">
+                <div class="stat-item">
+                    <div class="stat-item__number">100<span>%</span></div>
+                    <div class="stat-item__label">Private &amp; local-first data</div>
+                </div>
+                <hr class="stats-bar__divider">
+                <div class="stat-item">
+                    <div class="stat-item__number"><span>$</span>0</div>
+                    <div class="stat-item__label">Free to use, forever</div>
+                </div>
+                <hr class="stats-bar__divider">
+                <div class="stat-item">
+                    <div class="stat-item__number">iOS<span>&#x2665;</span></div>
+                    <div class="stat-item__label">Built with love for iPhone</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FEATURES ── -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="features__header">
+                <span class="section-eyebrow">Features</span>
+                <h2 class="section-title">Everything you need to stay on top</h2>
+                <p class="section-sub">Simple tools that give you a complete picture of your money — without the overwhelm.</p>
+            </div>
+            <div class="features__grid">
+                <div class="feature-card">
+                    <div class="feature-card__icon feature-card__icon--pink">&#128176;</div>
+                    <h3 class="feature-card__title">Expense Tracking</h3>
+                    <p class="feature-card__desc">Log any expense in seconds. Categorize it, add a description, choose a payment method — then forget about it.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card__icon feature-card__icon--green">&#127807;</div>
+                    <h3 class="feature-card__title">Income Tracking</h3>
+                    <p class="feature-card__desc">Record your salary, freelance income, or any other earnings. Always know how much you've brought in each month.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card__icon feature-card__icon--yellow">&#128202;</div>
+                    <h3 class="feature-card__title">Analytics &amp; Insights</h3>
+                    <p class="feature-card__desc">Beautiful charts break down your spending by category, compare months, and reveal the small expenses that add up.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card__icon feature-card__icon--purple">&#127991;</div>
+                    <h3 class="feature-card__title">Categories &amp; Budgets</h3>
+                    <p class="feature-card__desc">Create custom categories, set monthly budgets, and track fixed vs. variable expenses so you always know where you stand.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── HOW IT WORKS ── -->
+    <section class="section how" id="how-it-works">
+        <div class="container">
+            <div class="features__header">
+                <span class="section-eyebrow">How it works</span>
+                <h2 class="section-title">Up and running in minutes</h2>
+                <p class="section-sub">No spreadsheets, no syncing headaches. Just open the app and start.</p>
+            </div>
+            <div class="how__grid">
+                <div class="how__step">
+                    <div class="how__step-number">1</div>
+                    <h3 class="how__step-title">Create your account</h3>
+                    <p class="how__step-desc">Sign in with Google or continue as a guest — no credit card, no subscription required.</p>
+                </div>
+                <div class="how__step">
+                    <div class="how__step-number">2</div>
+                    <h3 class="how__step-title">Set up categories</h3>
+                    <p class="how__step-desc">Pick from our suggested defaults or build your own. Add your recurring bills and monthly income.</p>
+                </div>
+                <div class="how__step">
+                    <div class="how__step-number">3</div>
+                    <h3 class="how__step-title">Log your spending</h3>
+                    <p class="how__step-desc">Every time you spend, open Dashly and add it. Takes under five seconds.</p>
+                </div>
+                <div class="how__step">
+                    <div class="how__step-number">4</div>
+                    <h3 class="how__step-title">Read your dashboard</h3>
+                    <p class="how__step-desc">Your analytics update in real time. See your balance, top categories, and daily pace at a glance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── CTA ── -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <h2 class="cta-card__title">Take charge of your money today</h2>
+                <p class="cta-card__sub">Dashly is free, private, and takes two minutes to set up. Your future self will thank you.</p>
+                <a href="#download" class="btn btn-primary">Download for iOS</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div>
+                    <div class="footer__logo">Dash<span>ly</span></div>
+                    <div class="footer__tagline">Personal expense tracking for iOS</div>
+                </div>
+                <nav class="footer__links">
+                    <a href="/dashly-site/privacy.html">Privacy Policy</a>
+                    <a href="https://www.buymeacoffee.com/alecodes" target="_blank" rel="noopener">Buy me a coffee &#9749;</a>
+                    <a href="mailto:alecodesdancer@gmail.com">Contact</a>
+                </nav>
+            </div>
+            <div class="footer__copy">
+                &copy; 2026 Dashly. Made with love in Mexico.
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
